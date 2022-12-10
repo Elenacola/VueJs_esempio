@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestori gli Eventi - Direttiva v-on</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <script src="https://unpkg.com/jquery"></script>
+  <script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+  <div class="container-fluid" id="miapp">
+    <div class="row">
+      <div class="col">
+        <h1 class="text-center">Elenco Ordini in {{titolo}}</h1>
+      </div>
+    </div>
+    <!-- Elenco Ordini Clienti-->
+    <section id="ordini">
+    <div class="row">
+      <div class="col">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#ID</th>
+              <th>Nome</th>
+              <th>Prodotto</th>
+              <th>Prezzo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td scope="row">{{idordine}}</td>
+              <td>{{nome}}</td>
+              <td>{{prodotto}}</td>
+              <td>{{prezzo}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- <button type="button" class="btn btn-primary btn-lg btn-block" v-on:click="caricaDati">Carica altri dati</button> -->
+        <button type="button" class="btn btn-primary btn-lg btn-block" @click="caricaDati">Carica altri dati</button>
+      </div>
+    </div>    
+  </section>
+</div>
+
+<!-- qui inseriremo il codice -->
+<script>
+
+// $(function(){
+//   $('h1').html('Elenco Ordine da jQuery');
+// })
+
+const app = new Vue({
+  el : '#miapp',
+  data : {
+    titolo : 'Vue',
+    idordine : 'ACDF',
+    nome : 'Davide',
+    prodotto : 'Quaderno',
+    prezzo : 3
+  },
+  methods : {
+        caricaDati : function() {
+            //alert('Ok funziona');
+            this.nome = this.nome.toUpperCase();
+        }    
+  }
+});
+
+// alert('La variabili interna a Vue è: ' + app.titolo);
+
+</script>
+</body>
+</html>
