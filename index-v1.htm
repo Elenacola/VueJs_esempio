@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8">
+    <title>Mostrare Ordini Prodotti-API</title>    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class="container-fluid" id="miapp">
+      <div class="row">
+        <div class="col">
+          <h1 class="text-center">Elenco Prodotti</h1>
+        </div>
+      </div>
+      <!-- Elenco Ordini Clienti-->
+      <template v-if="prodotti">
+      <section id="ordini">
+        <div class="row">
+          <div class="col">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th @click="ordColonna('idprodotto')">#ID</th>
+                  <th @click="ordColonna('titolo')">Titolo</th>
+                  <th @click="ordColonna('categoria')">Categoria</th>
+                  <th @click="ordColonna('prezzo')">Prezzo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="prodotto of prodotti">
+                  <td scope="row">{{prodotto.idprodotto}}</td>
+                  <td>{{prodotto.titolo}}</td>
+                  <td>{{prodotto.categoria}}</td>
+                  <td>{{prodotto.prezzo}}</td>                  
+                </tr>
+             </tbody>
+            </table>
+            <button type="button" class="btn btn-primary btn-lg btn-block" @click="mostroForm">Aggiungi Prodotto</button>
+          </div>
+        </div>    
+      </section>
+    </template>
+    <template v-else>
+        <p class="text-align">Non ci sono prodotti</p>
+    </template>
+      <!--MODULO WEB-->
+      <section id="moduloweb" style="background-color:rgb(250, 236, 218)" class="my-5 p-2" v-show="showModulo">
+         <div class="row">
+              <div class="col">
+                <h3 class="text-center">Nuovo Prodotto {{titolo}}</h3>
+              </div>
+         </div>
+         <form @submit.prevent="recuperoDati">
+                <div class="form-row">
+                  <div class="col">
+                    <input v-model="titolo" type="text" name="titolo" class="form-control" placeholder="Titolo">
+                  </div>
+                  <div class="col">
+                    <input v-model="categoria" type="text" name="cat" class="form-control" placeholder="Categoria" required>
+                  </div> 
+                  <div class="col">
+                    <input v-model="prezzo" type="text" name="prezzo" class="form-control" placeholder="Prezzo" required>
+                  </div>
+                </div>
+                <button type="submit" name="" class="btn btn-danger btn-lg btn-block my-3">Invia</button>
+         </form>
+         <div v-show="errors.length">
+             <ul>
+               <li v-for="error of errors">{{error}}</li>
+             </ul>    
+         </div>
+      </section>
+    </div>   
+    <!-- qui inseriremo il codice -->
+    <script>
+
+const app = new Vue({
+  el : '#miapp',
+  data : {
+      prodotti : null,
+      titolo: '',
+      categoria : '',
+      prezzo: '',
+      showModulo : false,
+      errors : []
+  },
+  created: function(){
+      this.caricoDati();
+  },
+  methods : {
+
+        caricoDati : function(){
+             let url = `http://www.dcopelli.it/test/api/js/`;
+             fetch(url)
+             .then(resp => resp.json())
+             .then(data => this.prodotti = data.datiremoti)   
+             .catch(e => alert(e))
+        },
+        mostroForm : function() {
+          this.showModulo = !this.showModulo;
+        },
+        recuperoDati : function() {
+
+          if (!this.titolo) { this.errors.push("Inserire il titolo. Grazie")}
+          if (this.errors.length) return false;
+          let dato = {
+            idprodotto:Math.random().toString(36).substring(2,6).toUpperCase(),
+            titolo: this.titolo,
+            categoria: this.categoria,
+            prezzo: this.prezzo
+          }
+          this.prodotti.push(dato);
+          this.showModulo = !this.showModulo;
+        },
+        ordColonna: function (col) {
+            this.prodotti.sort(this.confronta(col));    
+        },
+        confronta: function(key) {
+            return function (a,b) {        
+            
+             const propA = a[key];
+             const propB = b[key];
+            
+             let comparison = 0;
+             if (propA > propB) {
+              comparison = 1;
+             } else if (propA < propB) {
+              comparison = -1;
+             }
+              return comparison;
+            }
+            
+        }      
+  }  
+
+});
+
+</script>
+</body>
+</html>
