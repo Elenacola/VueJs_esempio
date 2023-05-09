@@ -1,6 +1,8 @@
 # VueJs_APP-Esercitazioni
 
-![image](https://user-images.githubusercontent.com/79009772/208147692-18add878-6424-41ec-b009-62085adc6965.png)
+blog
+
+![image](https://github.com/Elenacola/VueJs_esempio/assets/79009772/bd8f0446-a4fa-4e0f-9a02-e352f0da936e)
 
 
 slider photo
